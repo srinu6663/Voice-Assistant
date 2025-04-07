@@ -136,14 +136,16 @@ def open_app_by_name(app_name, speak):
         try:
             subprocess.Popen(app_paths[app_key])
             speak(f"Opening {app_name}")
+            end_time = time.time()
+            execution_time = round(end_time - start_time, 2)
+            log_performance("Open Application", execution_time, success=True)
         except Exception as e:
             print(f"Error opening app: {e}")
             speak("Sorry, I couldn't open the application.")
-        end_time = time.time()
-        execution_time = round(end_time - start_time,2)
-        log_performance("Open Application", execution_time, success=True)
+            log_performance("Open Application", 0.0, success=False)
     else:
-        print(f"Open App Error: {e}")
-        speak("I couldn't open the application.")
+        print(f"App '{app_name}' not found in known paths.")
+        speak("I couldn't find that application. Please try another one.")
         log_performance("Open Application", 0.0, success=False)
+
 

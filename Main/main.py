@@ -153,71 +153,101 @@ from features import (
 )
 from commands import open_app_by_name, open_url  # ✅ Import the URL handling function
 
+import speech_recognition as sr
+import threading
+
+def start_hotword_listener(hotword="hey jarvis"):
+    recognizer = sr.Recognizer()
+    mic = sr.Microphone()
+    
+    with mic as source:
+        recognizer.adjust_for_ambient_noise(source)
+
+    def callback(rec, audio):
+        try:
+            trigger = rec.recognize_google(audio).lower()
+            if hotword in trigger:
+                # print("🟢 Hotword detected!")
+                activate_assistant()
+        except sr.UnknownValueError:
+            pass
+        except Exception as e:
+            print(f"Hotword error: {e}")
+
+    recognizer.listen_in_background(mic, callback)
+
+
 
 
 def main():
     speak("Loading your AI personal assistant E-On")
     wishMe()
 
+    # 🔊 Start hotword listener
+    start_hotword_listener(activate_assistant, hotword="E-On")
+
     while True:
-        print("\n🟢 Press 'Ctrl + Space' to activate...")
+        print("\n🟢 Press 'Ctrl + Space' or Say 'hey E-On' to activate...")
         keyboard.wait("ctrl+space")
-        speak("Tell me, how can I help you?")
-        statement = takeCommand().lower()
-        if statement == "none":
-            continue
-
-        if any(word in statement for word in ["goodbye", "bye", "stop"]):
-            speak("Your personal assistant E-On is shutting down. Goodbye!")
-            print("Your personal assistant E-On is shutting down. Goodbye!")
-            break
-
-        elif 'wikipedia' in statement:
-            handle_wikipedia(statement)
-
-        elif "play" in statement and "youtube" in statement:
-            handle_youtube()
-
-        elif 'open' in statement and "website" in statement:
-            statement = statement.replace("open", "").replace("website", "").strip()
-            open_url(statement)
-
-        elif "set brightness" in statement or "what is my brightness" in statement:
-            handle_brightness(statement)
-
-        elif "set volume" in statement or "what is my volume" in statement:
-            handle_volume(statement)
-
-        elif "open" in statement and "app" in statement:
-            app_name = statement.replace("open", "").replace("app", "").strip()
-            open_app_by_name(app_name,speak)
+        activate_assistant()
 
 
-        elif "weather" in statement:
-            handle_weather()
 
-        elif 'time' in statement:
-            handle_time()
+def activate_assistant():
+    speak("Tell me, how can I help you?")
+    print("Tell me, how can I help you?")
+    statement = takeCommand().lower()
+    if statement == "none":
+        return
 
-        elif 'who are you' in statement or 'what can you do' in statement:
-            handle_identity()
+    if any(word in statement for word in ["goodbye", "bye", "stop"]):
+        speak("Your personal assistant E-On is shutting down. Goodbye!")
+        print("Your personal assistant E-On is shutting down. Goodbye!")
+        exit()
 
-        elif "camera" in statement or "take a photo" in statement:
-            handle_camera()
+    elif 'wikipedia' in statement:
+        handle_wikipedia(statement)
 
-        elif any(word in statement for word in ["calculate", "compute", "solve", "define", "lookup", "explain", "analyze", "query"]):
-            handle_wolfram_or_chatbot(statement)
+    elif "play" in statement and "youtube" in statement:
+        handle_youtube()
 
-        elif "log off" in statement or "sign out" in statement:
-            handle_logoff()
+    elif 'open' in statement and "website" in statement:
+        statement = statement.replace("open", "").replace("website", "").strip()
+        open_url(statement)
 
-        elif "notify me" in statement or "remind me" in statement:
-            handle_reminder()
+    elif "set brightness" in statement or "what is my brightness" in statement:
+        handle_brightness(statement)
 
-        else:
-            handle_chatbot_fallback(statement)
+    elif "set volume" in statement or "what is my volume" in statement:
+        handle_volume(statement)
 
+    elif "open" in statement and "app" in statement:
+        app_name = statement.replace("open", "").replace("app", "").strip()
+        open_app_by_name(app_name, speak)
 
+    elif "weather" in statement:
+        handle_weather()
+
+    elif 'time' in statement:
+        handle_time()
+
+    elif 'who are you' in statement or 'what can you do' in statement:
+        handle_identity()
+
+    elif "camera" in statement or "take a photo" in statement:
+        handle_camera()
+
+    elif any(word in statement for word in ["calculate", "compute", "solve", "define", "lookup", "explain", "analyze", "query"]):
+        handle_wolfram_or_chatbot(statement)
+
+    elif "log off" in statement or "sign out" in statement:
+        handle_logoff()
+
+    elif "notify me" in statement or "remind me" in statement:
+        handle_reminder()
+
+    else:
+        handle_chatbot_fallback(statement)
 
 
 if __name__ == '__main__':

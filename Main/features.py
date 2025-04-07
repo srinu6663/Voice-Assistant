@@ -33,7 +33,7 @@ import speech_recognition as sr
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-print('Loading your AI personal assistant - E On')
+print('Loading your AI personal assistant - E-On')
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
