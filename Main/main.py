@@ -209,7 +209,7 @@ def main():
 
 
     while True:
-        print("\n🟢Press 'Ctrl + Space' to activate...")
+        print("\n🟢 Press 'Ctrl + Space' to activate...")
 
         keyboard.wait("ctrl+space")
 
@@ -240,7 +240,7 @@ def main():
             play_youtube(song, speak)
             response = f"Playing {song} on YouTube"
 
-        elif 'open' in statement:
+        elif 'open' in statement and "website" in statement:
             open_url(statement, speak)
 
         elif "set brightness" in statement:
@@ -265,7 +265,7 @@ def main():
         elif "what is my volume" in statement:
             get_current_volume(speak)
 
-        elif "open" in statement:
+        elif "open" in statement and "app" in statement:
             try:
                 app_name = statement.replace("open", "").strip()
                 open_app(app_name,speak)
@@ -324,16 +324,62 @@ def main():
             ec.capture(0, "robo camera", "img.jpg")
             response = "Captured a photo"
 
+        # elif any(word in statement for word in ["calculate", "compute", "solve", "define", "lookup", "explain", "analyze", "query"]):
+        #     speak(' What do you want to ask?')#I can answer computational and geographical questions.
+        #     question = takeCommand()
+        #     app_id = "62R7KQ-5VLLXK8LTW"
+        #     client = wolframalpha.Client(app_id)
+        #     res = client.query(question)
+        #     answer = next(res.results).text
+        #     speak(answer)
+        #     print(answer)
+        #     response = answer
+
         elif any(word in statement for word in ["calculate", "compute", "solve", "define", "lookup", "explain", "analyze", "query"]):
-            speak('I can answer computational and geographical questions. What do you want to ask?')
-            question = takeCommand()
-            app_id = "62R7KQ-5VLLXK8LTW"
-            client = wolframalpha.Client(app_id)
-            res = client.query(question)
-            answer = next(res.results).text
-            speak(answer)
-            print(answer)
-            response = answer
+            speak("What do you want to ask? You can also type if you'd prefer.")
+            
+            try:
+                question = takeCommand(timeout=3)
+                if not question:
+                    raise Exception("No speech detected")
+            except:
+                speak("I didn't hear anything. Please type your question.")
+                question = input("Type your question: ")
+
+            if question:
+                try:
+                    app_id = "62R7KQ-5VLLXK8LTW"  # WolframAlpha App ID
+                    client = wolframalpha.Client(app_id)
+                    res = client.query(question)
+
+                    # Check if result exists
+                    if res['@success'] == 'false' or not hasattr(res, 'results'):
+                        raise Exception("No valid result from WolframAlpha")
+
+                    answer = next(res.results).text
+                    speak(answer)
+                    print(answer)
+
+                except StopIteration:
+                    speak("Sorry, no detailed answer was found from WolframAlpha.")
+                    print("No result in WolframAlpha response.")
+                    speak("Let me try a different approach.")
+                    detailed_response, summary = get_chatbot_response(question)
+                    print(f"🤖 Chatbot: {detailed_response}")
+                    speak(summary)
+
+                    store_chat(statement, detailed_response)
+
+                except Exception as e:
+                    speak("WolframAlpha couldn't help with that.")
+                    print("Error:", e)
+                    speak("Let me ask my AI model instead.")
+                    detailed_response, summary = get_chatbot_response(question)
+                    print(f"🤖 Chatbot: {detailed_response}")
+                    speak(summary)
+
+                    store_chat(statement, detailed_response)
+
 
         elif "log off" in statement or "sign out" in statement:
             speak("Ok, your PC will log off in 10 seconds. Make sure you exit all applications.")
