@@ -149,14 +149,17 @@ from features import (
     handle_chatbot_fallback,
     takeCommand,
     speak,
-    wishMe
+    wishMe,
+    get_news,
+
 )
+from reminder import handle_reminder  # ✅ Import the reminder handling function
 from commands import open_app_by_name, open_url  # ✅ Import the URL handling function
 
 import speech_recognition as sr
-import threading
 
-def start_hotword_listener(hotword="hey jarvis"):
+
+def start_hotword_listener(activate_assistant,hotword="hey jarvis"):
     recognizer = sr.Recognizer()
     mic = sr.Microphone()
     
@@ -245,6 +248,9 @@ def activate_assistant():
 
     elif "notify me" in statement or "remind me" in statement:
         handle_reminder()
+    
+    elif "news" in statement:
+        get_news(statement)
 
     else:
         handle_chatbot_fallback(statement)

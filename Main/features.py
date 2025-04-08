@@ -26,8 +26,6 @@ from logger import log_performance
 import time
 
 
-
-
 import speech_recognition as sr
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -407,3 +405,59 @@ def generate_summary(text, ratio=0.2):
 
     except Exception:
         return text[:300]
+
+
+import requests
+
+API_KEY = "e2adb2380a444e52ad8d229da17fc7ef"  # Replace with your real NewsAPI key
+
+def get_news(statement):
+    try:
+        start_time = time.time()
+        statement = statement.lower()
+
+        category_map = {
+            "tech": "technology",
+            "technology": "technology",
+            "sports": "sports",
+            "business": "business",
+            "health": "health",
+            "entertainment": "entertainment",
+        }
+
+        category = "general"
+        for key in category_map:
+            if key in statement:
+                category = category_map[key]
+                break
+
+        url = f"https://newsapi.org/v2/top-headlines?category={category}&apiKey={API_KEY}"
+
+
+        try:
+            response = requests.get(url)
+            articles = response.json().get("articles", [])
+            end_time = time.time()
+            execution_time = end_time - start_time
+            log_performance("News Reader", execution_time, success=True)
+
+            if not articles:
+                speak(f"Sorry, I couldn't find any {category} news right now.")
+                return
+
+            speak(f"Here are the top {category} headlines:")
+
+            for i, article in enumerate(articles[:5], 1):  # Top 5 headlines
+                title = article.get('title', 'No Title')
+                source = article.get('source', {}).get('name', 'Unknown Source')
+                print(f"{i}. {title} ({source})")
+
+                if i <= 3:  # Only speak first 2 headlines
+                    speak(title)
+        except Exception as e:
+            speak("Sorry, I had trouble fetching the news.")
+            print(e)
+    except Exception as e:
+        print(e)
+        speak("Sorry, I couldn't fetch the news.")
+        log_performance("News Reader", 0.0, success=False)
