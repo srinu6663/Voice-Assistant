@@ -6,8 +6,6 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 
-
-print('Loading your AI personal assistant - E-On')
 def speak(text):
     engine.say(text)
     engine.runAndWait()
