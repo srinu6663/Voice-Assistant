@@ -1,7 +1,7 @@
 import subprocess
 import time
 import webbrowser
-import re
+import requests
 from openai import Engine
 import pyttsx3
 from screen_brightness_control import set_brightness, get_brightness
@@ -9,6 +9,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 import ctypes
 from logger import log_performance
+from functions import speak
 
 
 engine = pyttsx3.init('sapi5')
@@ -20,47 +21,33 @@ def speak(text):
     engine.runAndWait()
 
 
-saved_websites = {
-    "youtube": "https://www.youtube.com",
-    "google": "https://www.google.com",
-    "gmail": "https://mail.google.com",
-    "stackoverflow": "https://stackoverflow.com",
-    "news": "https://timesofindia.indiatimes.com/home/headlines"
-}
+def open_url(query, speak=None):
+    # Clean the query
+    query = query.strip().lower()
 
+    # Add protocol if not present
+    if not query.startswith("http"):
+        # Try forming a smart URL
+        domain_extensions = [".com", ".in", ".org", ".net", ".edu"]
+        for ext in domain_extensions:
+            url = f"https://{query.replace(' ', '')}{ext}"
+            try:
+                response = requests.get(url, timeout=3)
+                if response.status_code == 200:
+                    webbrowser.open_new_tab(url)
+                    if speak:
+                        speak(f"Opening {url}")
+                    print(f"🌍 Opening: {url}")
+                    return
+            except:
+                continue
 
-def is_valid_url(query):
-    """Check if the query contains a valid domain (like 'google.com')."""
-    return bool(re.search(r"\.[a-z]{2,}$", query)) 
-
-def open_url(query):
-    """
-    Opens a URL or website based on the command.
-    
-    :param query: The spoken command
-    :param speak: The speak function reference for feedback
-    """
-    query = query.replace("open", "").strip()
-
-    print(f"🔍 Processing query: {query}")
-
-    if query in saved_websites:
-        web_url = saved_websites[query]
-        speak(f"Opening {query}")
-        print(f"🌍 Opening website: {web_url}")
-        webbrowser.open(web_url)
-
-    elif is_valid_url(query):
-        web_url = f"https://{query}"
-        speak(f"Opening {query}")
-        print(f"🌍 Opening website: {web_url}")
-        webbrowser.open(web_url)
-
-    else:
-        web_url = f"https://{query}.com"
-        speak(f"Opening {query}")
-        print(f"🌍 Trying website: {web_url}")
-        webbrowser.open(web_url)
+    # If nothing matched, fall back to Google Search
+    search_url = f"https://www.google.com/search?q={query}"
+    webbrowser.open_new_tab(search_url)
+    if speak:
+        speak(f"I couldn't find the website. Searching Google for {query}")
+    print(f"🔍 Searching Google for: {query}")
 
 def set_brightness_level(level):
     try:

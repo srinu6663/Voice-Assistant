@@ -147,52 +147,59 @@ from features import (
     handle_logoff,
     handle_reminder,
     handle_chatbot_fallback,
-    takeCommand,
-    speak,
-    wishMe,
     get_news,
-
 )
+from functions import takeCommand, speak, wishMe  # ✅ Import the functions for voice recognition and speaking
 from reminder import handle_reminder  # ✅ Import the reminder handling function
 from commands import open_app_by_name, open_url  # ✅ Import the URL handling function
 
 import speech_recognition as sr
+import threading
 
 
-def start_hotword_listener(activate_assistant,hotword="hey jarvis"):
+hotword_active = True  # Global flag to prevent duplicate activation
+activation_lock = threading.Lock()
+
+def start_hotword_listener(callback_func, hotword="hey jarvis"):
     recognizer = sr.Recognizer()
     mic = sr.Microphone()
-    
+
     with mic as source:
         recognizer.adjust_for_ambient_noise(source)
 
-    def callback(rec, audio):
+    def hotword_callback(rec, audio):
         try:
             trigger = rec.recognize_google(audio).lower()
             if hotword in trigger:
-                # print("🟢 Hotword detected!")
-                activate_assistant()
+                if activation_lock.acquire(blocking=False):
+                    try:
+                        callback_func()
+                    finally:
+                        activation_lock.release()
         except sr.UnknownValueError:
             pass
         except Exception as e:
             print(f"Hotword error: {e}")
 
-    recognizer.listen_in_background(mic, callback)
-
-
-
+    recognizer.listen_in_background(mic, hotword_callback)
 
 def main():
     speak("Loading your AI personal assistant E-On")
     wishMe()
 
-    # 🔊 Start hotword listener
-    start_hotword_listener(activate_assistant, hotword="E-On")
+    # Start hotword listener in background
+    threading.Thread(target=start_hotword_listener, args=(activate_assistant, "hey jarvis"), daemon=True).start()
 
     while True:
         print("\n🟢 Press 'Ctrl + Space' or Say 'hey E-On' to activate...")
         keyboard.wait("ctrl+space")
-        activate_assistant()
+
+        # Use lock to prevent overlap
+        if activation_lock.acquire(blocking=False):  # Only allow if not already active
+            try:
+                activate_assistant()
+            finally:
+                activation_lock.release()
 
 
 
@@ -248,7 +255,7 @@ def activate_assistant():
 
     elif "notify me" in statement or "remind me" in statement:
         handle_reminder()
-    
+        
     elif "news" in statement:
         get_news(statement)
 

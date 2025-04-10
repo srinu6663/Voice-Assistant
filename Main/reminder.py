@@ -1,44 +1,13 @@
 import dateparser
 from datetime import datetime, timedelta
-import pyttsx3
 from plyer import notification
 import time
 import threading
-import speech_recognition as sr
 import re
+from logger import log_performance
+from functions import takeCommand, speak
 
 reminders = []
-
-
-engine = pyttsx3.init('sapi5')
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
-
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
-
-
-def takeCommand(timeout=5):
-    """Fast and accurate voice recognition using Google Speech API."""
-    
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source, duration=1)
-        print("🎤 Listening...")
-
-        try:
-            audio = recognizer.listen(source, timeout=timeout)
-            command = recognizer.recognize_google(audio).lower()
-            print(f"Recognized: {command}")
-            return command
-        except sr.UnknownValueError:
-            print("Could not understand the audio.")
-        except sr.RequestError:
-            print("Google Speech API is unavailable.")
-
-    return ""
 
 def add_reminder(title, message, delay_minutes):
     trigger_time = datetime.now() + timedelta(minutes=delay_minutes)
@@ -72,34 +41,41 @@ def extract_time_phrase(text):
     return match.group(0) if match else None
 
 def handle_reminder():
-    speak("What should I remind you, and when?")
-    full_input = takeCommand().lower()
-    print(f"Full Input Received: {full_input}")
+    try:
+        speak("What should I remind you, and when?")
+        full_input = takeCommand().lower()
+        print(f"Full Input Received: {full_input}")
 
-    time_phrase = extract_time_phrase(full_input)
-    print(f"Extracted Time Phrase: {time_phrase}")  # Debug print
+        time_phrase = extract_time_phrase(full_input)
+        print(f"Extracted Time Phrase: {time_phrase}")  # Debug print
 
-    if not time_phrase:
-        speak("I couldn't find a time in your message. Please try again.")
-        return
+        start_time = time.time()
 
-    reminder_time = dateparser.parse(time_phrase)
-    if not reminder_time:
-        speak("I couldn't understand the time. Please try again.")
-        return
+        if not time_phrase:
+            speak("I couldn't find a time in your message. Please try again.")
+            return
 
-    now = datetime.now()
-    delay = (reminder_time - now).total_seconds()
+        reminder_time = dateparser.parse(time_phrase)
+        if not reminder_time:
+            speak("I couldn't understand the time. Please try again.")
+            return
 
-    if delay <= 0:
-        speak("That time is in the past. Please provide a future time.")
-        return
+        now = datetime.now()
+        delay = (reminder_time - now).total_seconds()
 
-    delay_minutes = delay / 60
-    message = full_input.replace(time_phrase, "").strip()
-    if not message:
-        message = "Reminder"
+        if delay <= 0:
+            speak("That time is in the past. Please provide a future time.")
+            return
 
-    add_reminder("Reminder", message, delay_minutes)
-    speak(f"Reminder set in {int(delay_minutes)} minutes for: {message}.")
+        delay_minutes = delay / 60
+        message = full_input.replace(time_phrase, "").strip()
+        if not message:
+            message = "Reminder"
 
+        add_reminder("Reminder", message, delay_minutes)
+        speak(f"Reminder set in {int(delay_minutes)} minutes for: {message}.")
+        end_time = time.time()
+        execution_time = round(end_time - start_time, 2)
+        log_performance("Set reminder", execution_time, success=True)
+    except Exception as e:
+        log_performance("Set reminder", execution_time, success=False)

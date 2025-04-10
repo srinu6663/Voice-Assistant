@@ -18,62 +18,40 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 import math
-import pyttsx3
 import datetime
 import os
 import wolframalpha
 from logger import log_performance
 import time
-
-
-import speech_recognition as sr
+import requests
+from functions import takeCommand, speak
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-print('Loading your AI personal assistant - E-On')
 
-engine = pyttsx3.init('sapi5')
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
 
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+def activate_assistant(command=None):
+    if not command:
+        speak("Tell me, how can I help you?")
+        print("Tell me, how can I help you?")
+        
+        max_attempts = 3
+        attempts = 0
 
-def wishMe():
-    hour = datetime.datetime.now().hour
-    if hour >= 0 and hour < 12:
-        speak("Hello, Good Morning")
-        print("Hello, Good Morning")
-    elif hour >= 12 and hour < 18:
-        speak("Hello, Good Afternoon")
-        print("Hello, Good Afternoon")
+        while attempts < max_attempts:
+            command = takeCommand().lower()
+            if command.strip():  # Valid input
+                break
+            attempts += 1
+            speak("I didn't catch that. Please try again.")
+            print("🔁 Listening again...")
+
+        if not command.strip():
+            speak("Still no input detected. Let's try again later.")
+            return
     else:
-        speak("Hello, Good Evening")
-        print("Hello, Good Evening")
-
-
-def takeCommand(timeout=5):
-    """Fast and accurate voice recognition using Google Speech API."""
-    
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source, duration=1)
-        print("🎤 Listening...")
-
-        try:
-            audio = recognizer.listen(source, timeout=timeout)
-            command = recognizer.recognize_google(audio).lower()
-            print(f"Recognized: {command}")
-            return command
-        except sr.UnknownValueError:
-            print("Could not understand the audio.")
-        except sr.RequestError:
-            print("Google Speech API is unavailable.")
-
-    return ""
+        print(f"🗣️ Detected command: {command}")
 
 
 
@@ -146,9 +124,9 @@ def handle_brightness(statement):
         if "set" in statement:
             speak("What brightness level do you want?")
             level = int(takeCommand().replace("%", ""))
-            set_brightness_level(level, speak)
+            set_brightness_level(level)
         else:
-            get_current_brightness(speak)
+            get_current_brightness()
         end_time = time.time()
         execution_time = end_time - start_time
         log_performance("Brightness Control", execution_time, success=True)
@@ -163,9 +141,9 @@ def handle_volume(statement):
         if "set" in statement:
             speak("What volume level do you want?")
             level = int(takeCommand().replace("%", ""))
-            set_volume_level(level, speak)
+            set_volume_level(level)
         else:
-            get_current_volume(speak)
+            get_current_volume()
         end_time = time.time()
         execution_time = end_time - start_time
         log_performance("Volume Control", execution_time, success=True)
