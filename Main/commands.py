@@ -2,7 +2,6 @@ import subprocess
 import time
 import webbrowser
 import requests
-from openai import Engine
 import pyttsx3
 from screen_brightness_control import set_brightness, get_brightness
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
