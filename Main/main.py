@@ -22,7 +22,7 @@ import speech_recognition as sr
 import threading
 
 
-hotword_active = True  # Global flag to prevent duplicate activation
+hotword_active = True  # Global flag 
 activation_lock = threading.Lock()
 
 def start_hotword_listener(callback_func, hotword="hey jarvis"):
@@ -114,7 +114,7 @@ def activate_assistant():
         handle_camera()
 
     elif any(word in statement for word in ["calculate", "compute", "solve", "define", "lookup", "explain", "analyze", "query"]):
-        handle_wolfram_or_chatbot(statement)
+        handle_wolfram_or_chatbot()
 
     elif "log off" in statement or "sign out" in statement:
         handle_logoff()
