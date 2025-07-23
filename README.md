@@ -1,17 +1,5 @@
 # 🎤 AI Voice Assistant (E-On) - Chat Bot with Virtual Assistant
 
-<div align="center">
-
-![JNTUH Logo](./resource/image1.png)
-
-![SIET Logo](./resource/image2.png)
-
-> **An Academic Research Project from Sreyas Institute of Engineering & Technology**
-> Submitted to Jawaharlal Nehru Technological University, Hyderabad
-> Department of CSE (Artificial Intelligence & Machine Learning)
-
-</div>
-
 A powerful, feature-rich AI voice assistant built with Python that demonstrates the practical application of Natural Language Processing (NLP), speech processing, and real-time communication. This intelligent assistant integrates machine learning algorithms, speech synthesis, and cloud AI services to create a smart and learning personal assistant.
 
 ## 🎯 Project Overview
@@ -137,7 +125,7 @@ ai-voice-assistant/
 │       └── style.css             # Modern UI styling
 ├── resource/                      # Image resources and documentation
 │   ├── image1.png                # University logos
-│   ├── image2.png                # Institution logos  
+│   ├── image2.png                # Institution logos
 │   ├── image3.jpeg               # System workflow diagrams
 │   ├── image4.jpeg               # Architecture diagrams
 │   ├── image5.jpeg               # Interface screenshots
@@ -228,103 +216,6 @@ pywhatkit            # YouTube automation
 wikipedia            # Wikipedia API access
 wolframalpha         # Computational queries
 ```
-
-### 🛠️ Installation Steps
-
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/srinu6663/Voice-Assistant.git
-   cd Voice-Assistant
-   ```
-
-2. **Create and Activate Virtual Environment**
-
-   ```bash
-   python -m venv env
-   # Windows
-   env\Scripts\activate
-   # Linux/Mac
-   source env/bin/activate
-   ```
-
-3. **Install Dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **API Configuration**
-   Create a `.env` file in the Main directory:
-
-   ```env
-   # AI Services
-   TOGETHER_AI_API_KEY=your_together_ai_key
-   OPENAI_API_KEY=your_openai_key
-
-   # Information Services
-   WOLFRAM_ALPHA_API_KEY=your_wolfram_alpha_key
-   OPENWEATHER_API_KEY=your_weather_api_key
-
-   # Optional Services
-   GOOGLE_CALENDAR_API_KEY=your_google_calendar_key
-   SPOTIFY_CLIENT_ID=your_spotify_client_id
-   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-   ```
-
-5. **Initialize ChromaDB**
-
-   ```bash
-   cd Main
-   python -c "from memory import initialize_memory; initialize_memory()"
-   ```
-
-6. **Required Packages**
-   The project uses the following main packages:
-   - `speech_recognition` - Speech-to-text conversion
-   - `pyttsx3` - Text-to-speech engine
-   - `pywhatkit` - YouTube and web automation
-   - `wikipedia` - Wikipedia API access
-   - `requests` - HTTP requests for APIs
-   - `opencv-python` - Camera operations
-   - `wolframalpha` - Complex calculations
-   - `openai` - AI chatbot integration
-   - `screen_brightness_control` - Display brightness control
-   - `pycaw` - Volume control
-   - `chromadb` - Vector database for memory
-   - `keyboard` - Hotkey detection
-
-## 🎮 Usage Guide
-
-### 🚀 Starting the Assistant
-
-1. **Launch the Application**
-
-   ```bash
-   cd Main
-   python main.py
-   ```
-
-2. **Activation Methods**
-
-   - **Hotword**: Say "Hey Jarvis" (background listening)
-   - **Keyboard**: Press `Ctrl + Space` for instant activation
-   - **Web Interface**: Open `frontend/index.html` in browser
-
-3. **First Interaction**
-   - Wait for "Tell me, how can I help you?" prompt
-   - Speak clearly or use the web interface
-   - System provides both audio and visual feedback
-
-### 🌐 Web Interface Features
-
-The modern web interface includes:
-
-- **Holographic Animation**: Dynamic visual feedback during interaction
-- **Dual Input Methods**: Voice (microphone) and text (chat) input
-- **Real-time Chat History**: Persistent conversation tracking
-- **Wave Animations**: Visual representation of voice activity
-- **Responsive Design**: Optimized for various screen sizes
 
 ### 🗣️ Voice Command Examples
 
@@ -527,26 +418,6 @@ WIKIPEDIA_SUMMARY_SENTENCES = 3
 NEWS_SOURCE_COUNT = 5
 ```
 
-### 🎨 UI Customization
-
-Modify the web interface in `frontend/`:
-
-- **Colors**: Edit CSS variables in `style.css`
-- **Animations**: Customize wave effects in `script.js`
-- **Layout**: Modify structure in `index.html`
-
-### 📱 Mobile Optimization
-
-For mobile deployment:
-
-```javascript
-// Responsive design breakpoints
-@media (max-width: 768px) {
-    .mic-btn { scale: 0.8; }
-    .wave-container { radius: 80px; }
-}
-```
-
 ## 🚀 Future Scope & Research Directions
 
 ### 🔮 Planned Enhancements
@@ -708,7 +579,6 @@ python -c "import psutil; print(f'CPU: {psutil.cpu_percent()}%, RAM: {psutil.vir
 # Solution: Restart ChromaDB and clear cache
 python reset_memory_database.py
 ```
-
 
 #### Log Analysis
 
