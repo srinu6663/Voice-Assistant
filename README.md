@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![JNTUH Logo](./Chat%20Bot%20with%20Virtual%20assistant/image1.png)
+![JNTUH Logo](./resource/image1.png)
 
-![SIET Logo](./Chat%20Bot%20with%20Virtual%20assistant/image2.png)
+![SIET Logo](./resource/image2.png)
 
 > **An Academic Research Project from Sreyas Institute of Engineering & Technology**
 > Submitted to Jawaharlal Nehru Technological University, Hyderabad
@@ -24,15 +24,15 @@ A powerful, feature-rich AI voice assistant built with Python that demonstrates 
 
 ### System Architecture & Workflow
 
-![System Workflow](./Chat%20Bot%20with%20Virtual%20assistant/image3.jpeg) ![Detailed Architecture](./Chat%20Bot%20with%20Virtual%20assistant/image4.jpeg)
+![System Workflow](./resource/image3.jpeg) ![Detailed Architecture](./resource/image4.jpeg)
 
 ### User Interfaces
 
-![Startup Interface](./Chat%20Bot%20with%20Virtual%20assistant/image5.jpeg) ![Web Interface](./Chat%20Bot%20with%20Virtual%20assistant/image9.jpeg)
+![Startup Interface](./resource/image5.jpeg) ![Web Interface](./resource/image9.jpeg)
 
 ### Performance Analytics
 
-![Workflow Analysis](./Chat%20Bot%20with%20Virtual%20assistant/image6.jpeg) ![Performance Metrics](./Chat%20Bot%20with%20Virtual%20assistant/image8.jpeg)
+![Workflow Analysis](./resource/image6.jpeg) ![Performance Metrics](./resource/image8.jpeg)
 
 _Complete system overview showcasing architecture, interfaces, and performance analytics_
 
@@ -109,15 +109,17 @@ The AI Voice Assistant operates through a sophisticated multi-stage pipeline:
 6. **Response Generation**: Synthesizes appropriate response
 7. **Audio Output**: pyttsx3 engine delivers spoken feedback
 
-![System Workflow Overview](./Chat%20Bot%20with%20Virtual%20assistant/image3.jpeg)
+![System Workflow Overview](./resource/image3.jpeg)
 _Figure 1: High-Level System Workflow - Voice Input to Audio Output Pipeline_
 
 ### 📊 Detailed System Architecture
 
 The comprehensive system architecture demonstrates the integration of multiple AI components:
 
-![Detailed System Architecture](./Chat%20Bot%20with%20Virtual%20assistant/image4.jpeg)
-_Figure 2: Detailed System Architecture - Modular AI Integration Framework_### 📂 Modular Architecture
+![Detailed System Architecture](./resource/image4.jpeg)
+_Figure 2: Detailed System Architecture - Modular AI Integration Framework_
+
+### 📂 Modular Architecture
 
 ```
 ai-voice-assistant/
@@ -129,12 +131,20 @@ ai-voice-assistant/
 │   ├── memory.py                  # ChromaDB memory management
 │   ├── reminder.py                # Notification system
 │   ├── logger.py                  # Performance monitoring
-│   ├── frontend/                  # Web interface
-│   │   ├── index.html            # Holographic UI with wave animations
-│   │   ├── script.js             # Frontend interaction logic
-│   │   └── style.css             # Modern UI styling
-│   ├── chroma_data/              # Vector database storage
-│   └── env/                      # Python virtual environment
+│   └── frontend/                  # Web interface
+│       ├── index.html            # Holographic UI with wave animations
+│       ├── script.js             # Frontend interaction logic
+│       └── style.css             # Modern UI styling
+├── resource/                      # Image resources and documentation
+│   ├── image1.png                # University logos
+│   ├── image2.png                # Institution logos  
+│   ├── image3.jpeg               # System workflow diagrams
+│   ├── image4.jpeg               # Architecture diagrams
+│   ├── image5.jpeg               # Interface screenshots
+│   ├── image6.jpeg               # Performance analytics
+│   ├── image7.jpeg               # Command structure
+│   ├── image8.jpeg               # Metrics dashboard
+│   └── image9.jpeg               # Web interface
 ├── logs/                          # Performance analytics
 │   ├── feature_logs.csv          # Feature usage statistics
 │   └── generated_performance_logs_with_timestamp.csv
@@ -144,11 +154,8 @@ ai-voice-assistant/
 │   ├── feature_success_rate.png  # Reliability metrics
 │   └── normalized_confusion_matrix.png
 ├── chroma_data/                   # ChromaDB vector storage
-├── Traning/                       # Development and training files
 ├── analyze_logs.py               # Performance analysis utilities
-└── Chat Bot with Virtual assistant/  # Academic documentation
-    ├── input.md                  # Project documentation
-    └── image*.png/jpeg           # System diagrams and results
+└── README.md                     # Project documentation
 ```
 
 ### 🧠 AI Integration Architecture
@@ -165,13 +172,15 @@ The system leverages multiple AI services and models:
 
 #### Startup Interface
 
-![System Startup Interface](./Chat%20Bot%20with%20Virtual%20assistant/image5.jpeg)
+![System Startup Interface](./resource/image5.jpeg)
 _Figure 3: System Startup and Activation Interface - Terminal-based initialization with welcome message_
 
 #### Interactive Web Interface
 
-![Web Interface](./Chat%20Bot%20with%20Virtual%20assistant/image9.jpeg)
-_Figure 4: Modern Web Interface - Holographic design with voice and chat capabilities_## 🚀 Installation & Setup
+![Web Interface](./resource/image9.jpeg)
+_Figure 4: Modern Web Interface - Holographic design with voice and chat capabilities_
+
+## 🚀 Installation & Setup
 
 ### 📋 Prerequisites
 
@@ -412,17 +421,17 @@ The system generates comprehensive analytics:
 
 #### System Performance Analysis
 
-![Workflow Analysis](./Chat%20Bot%20with%20Virtual%20assistant/image6.jpeg)
+![Workflow Analysis](./resource/image6.jpeg)
 _Figure 5: Detailed Workflow Analysis - Command processing pipeline and decision logic_
 
 #### Command Structure Analysis
 
-![Modular Command Structure](./Chat%20Bot%20with%20Virtual%20assistant/image7.jpeg)
+![Modular Command Structure](./resource/image7.jpeg)
 _Figure 6: Modular Command Structure - Component interaction and API integration_
 
 #### Performance Metrics Dashboard
 
-![Performance Dashboard](./Chat%20Bot%20with%20Virtual%20assistant/image8.jpeg)
+![Performance Dashboard](./resource/image8.jpeg)
 _Figure 7: Performance Analytics Dashboard - Usage statistics, success rates, and response times_
 
 ### 📈 Monitoring Commands
@@ -700,27 +709,6 @@ python -c "import psutil; print(f'CPU: {psutil.cpu_percent()}%, RAM: {psutil.vir
 python reset_memory_database.py
 ```
 
-### � Support Channels
-
-#### Academic Support
-
-- **Institution**: Sreyas Institute of Engineering & Technology
-- **Department**: Computer Science & Engineering (AIML)
-- **Contact**: Project supervisors and department faculty
-
-#### Technical Support
-
-- **GitHub Issues**: [Create Issue](https://github.com/srinu6663/Voice-Assistant/issues)
-- **Documentation**: Check `Chat Bot with Virtual assistant/` folder
-- **Performance Logs**: Review `logs/` directory for debugging
-
-#### Community Support
-
-- **Code Review**: Submit pull requests for community review
-- **Feature Requests**: Propose enhancements through GitHub issues
-- **Bug Reports**: Detailed issue reporting with logs and system info
-
-### 🔍 Debugging Tools
 
 #### Log Analysis
 
