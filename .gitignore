@@ -1,0 +1,35 @@
+.qodo
+
+# Virtual environments
+env/
+venv/
+.venv/
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Project specific
+chroma_data/
+logs/
+graphs/
+Traning/
+analyze_logs.py
+app_paths.json
+back.txt
+img.jpg
+readme.txt
